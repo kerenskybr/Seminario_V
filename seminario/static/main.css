@@ -1,0 +1,130 @@
+body {
+  background: #4d4d4dff;
+  color: #333333;
+  margin-top: 5rem;
+  
+}
+
+h1, h2, h3, h4, h5, h6 {
+  color: #444444;
+}
+
+.bg-steel {
+  background-color: #565656;
+}
+
+.bg-personalizado{
+  background-color: #ccccccff; /*ffcc00ff*/
+}
+
+.site-header .navbar-nav .nav-link {
+  color: #565656;
+}
+
+.site-header .navbar-nav .nav-link:hover {
+  color: #222222;
+}
+
+.site-header .navbar-nav .nav-link.active {
+  font-weight: 500;
+}
+
+.content-section {
+  background: #ffffff;
+  padding: 10px 20px;
+  border: 1px solid #dddddd;
+  border-radius: 3px;
+  margin-bottom: 20px;
+}
+
+.article-title {
+  color: #444444;
+}
+
+a.article-title:hover {
+  color: #428bca;
+  text-decoration: none;
+}
+
+.article-content {
+  white-space: pre-line;
+}
+
+.article-img {
+  height: 65px;
+  width: 65px;
+  margin-right: 16px;
+}
+
+.article-metadata {
+  padding-bottom: 1px;
+  margin-bottom: 4px;
+  border-bottom: 1px solid #e3e3e3
+}
+
+.article-metadata a:hover {
+  color: #333;
+  text-decoration: none;
+}
+
+.article-svg {
+  width: 25px;
+  height: 25px;
+  vertical-align: middle;
+}
+
+.account-img {
+  height: 125px;
+  width: 125px;
+  margin-right: 20px;
+  margin-bottom: 16px;
+}
+/* abaixo, conteudo personalizado */
+
+.imagem-fixa{
+  position: fixed;
+  margin-top: -150px;
+  margin-left: -15px;
+  z-index: -1;
+}
+
+.login-centro {
+  margin: 0 auto; 
+  width:500px;
+  text-align: left;
+
+}
+.imagem-fundo{
+  z-index: -1;
+}
+.texto-pg-inicial{
+  z-index: 1;
+  color: #000000;
+}
+
+.service-box {
+  max-width: 400px;
+}
+
+.tamanho-grafico{
+  height: 125px;
+  width: 125px;
+  float: right;
+}
+
+.esquerda {
+  margin: 0 left; 
+  width:650px;
+  text-align: left;
+  float: left;
+}
+.direita {
+  margin: 0 right; 
+  width:650px;
+  text-align: left;
+  float: right;
+}
+
+.conteudo-inicio{
+  opacity: 0.5;
+}

@@ -1,0 +1,103 @@
+{% extends "layout.html" %}
+{% block content %}
+
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-sm-6">
+			<div class="content-section">
+        <form method="POST" action="">
+            {{ formulario.hidden_tag() }}
+            <fieldset class="form-group form-inline ">
+                <legend class="border-bottom mb-2">Contas a Pagar</legend>
+                <div class="form col-sm-5"><!-- form group do descricao pagar -->
+                    {{ formulario.descpagar.label(class="form-control-label") }}
+
+                    {% if formulario.descpagar.errors %} <!-- se o form for preenchido errado, exibe erro-->
+                        {{ formulario.descpagar(class="form-control form-control-sm is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in formulario.descpagar.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ formulario.descpagar(class="form-control form-control-sm") }}
+                    {% endif %}
+                </div>
+
+                <div class="form col-sm-5"> <!-- form group do valor pagar -->
+                    {{ formulario.valorpagar.label(class="form-control-label") }}
+                    {% if formulario.valorpagar.errors %}
+                        {{ formulario.valorpagar(class="form-control form-control-sm is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in formulario.valorpagar.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ formulario.valorpagar(class="form-control form-control-sm") }}
+                    {% endif %}
+                </div>
+
+                <div class="form col-sm-5" > <!-- form group do data pagar -->
+                    {{ formulario.datapagar.label(class="form-control-label") }}
+                    {% if formulario.datapagar.errors %}
+                        {{ formulario.datapagar(class="form-control form-control-sm is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in formulario.datapagar.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ formulario.datapagar(class="form-control form-control-sm" ) }} <!--INSERT -->
+                       
+                    {% endif %}
+                </div>
+             		 <div class="form-group col-sm-5">
+                {{ formulario.submit(class="btn btn-sucess btn-block") }}
+            	</div>
+            </fieldset>
+           
+        </form>
+    </div>
+</div>
+		<div class="col-sm-6">
+			<div class="content-section">
+     
+
+				__copia e cola __
+    	</div>
+		</div>	
+	</div>
+</div>
+
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-sm-6">
+			<div class="content-section">
+		 
+				<div class="article-metadata">
+              	<h5 class="text">{{ descricao.descpagar, descricao.valorpagar, descricao.datapagar }}</h5>
+       
+            </div>
+           
+			</div>
+		</div>
+		<div class="col-sm-6">
+			
+			
+		</div>
+	</div>
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+{% endblock content %}
