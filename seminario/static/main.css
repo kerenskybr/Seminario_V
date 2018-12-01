@@ -1,5 +1,5 @@
 body {
-  background: #4d4d4dff;
+  /*background: #4d4d4dff;*/
   color: #333333;
   margin-top: 5rem;
   
@@ -10,11 +10,11 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .bg-steel {
-  background-color: #565656;
+  background-color: #ffffff;
 }
 
 .bg-personalizado{
-  background-color: #ccccccff; /*ffcc00ff*/
+  background-color: #ffffff; /*ffcc00ff*/
 }
 
 .site-header .navbar-nav .nav-link {
@@ -127,4 +127,11 @@ a.article-title:hover {
 
 .conteudo-inicio{
   opacity: 0.5;
+}
+
+.cor-preta{
+  background-color: #4d4d4dff; /*ffcc00ff*/
+  width:1200px;
+  height: 200px;
+  float: center;
 }

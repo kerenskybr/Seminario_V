@@ -1,0 +1,10 @@
+
+>>> query = Pagar.query.filter_by(id_usuario=1)
+>>> for desc in query:
+...     print(desc.id_usuario)
+... 
+1
+1
+1
+1
+

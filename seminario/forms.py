@@ -58,5 +58,6 @@ class FormDeAtualizarConta(FlaskForm):
 class FormContasPagar(FlaskForm):
     descpagar = StringField('Descrição', validators=[DataRequired(), Length(min=2, max=50)])
     valorpagar = FloatField('Valor', validators=[DataRequired()])
-    datapagar = StringField('Data a Pagar', validators=[DataRequired()])
-    submit = SubmitField('Adcionar')
+    datapagar = DateField('Data a Pagar', validators=[DataRequired()], format='%d/%m/%Y')
+    submit = SubmitField('Adicionar')
+    submit_editar = SubmitField('Atualizar')

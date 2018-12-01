@@ -1,14 +1,14 @@
 {% extends "layout.html" %}
 {% block content %}
-
 <div class="container-fluid">
 	<div class="row">
 		<div class="col-sm-6">
-			<div class="content-section">
-        <form method="POST" action="">
+
+	<div class="content-section">
+      <form method="POST" action="">
             {{ formulario.hidden_tag() }}
             <fieldset class="form-group form-inline ">
-                <legend class="border-bottom mb-2">Contas a Pagar</legend>
+                <legend class="border-bottom mb-2">Editando - Contas a Pagar</legend>
                 <div class="form col-sm-5"><!-- form group do descricao pagar -->
                     {{ formulario.descpagar.label(class="form-control-label") }}
 
@@ -38,7 +38,7 @@
                     {% endif %}
                 </div>
 
-                <div class="form col-sm-5" data-date-format="dd/mm/yyyy" > <!-- form group do data pagar -->
+                <div class="form col-sm-5" > <!-- form group do data pagar -->
                     {{ formulario.datapagar.label(class="form-control-label") }}
                     {% if formulario.datapagar.errors %}
                         {{ formulario.datapagar(class="form-control form-control-sm is-invalid") }}
@@ -48,81 +48,41 @@
                             {% endfor %}
                         </div>
                     {% else %}
-                        {{ formulario.datapagar(class="form-control form-control-sm") }} <!--INSERT -->
+                        {{ formulario.datapagar(class="form-control form-control-sm" ) }} <!--INSERT -->
                        
                     {% endif %}
                 </div>
-             		 <div class="form-group col-sm-5">
-                {{ formulario.submit(class="btn btn-sucess btn-block") }}
-            	</div>
+             
+                {{ formulario.submit_editar(class="btn-group btn-success btn-sm mt-1 mb-1") }}
+
+             		 <button type="button" class="btn btn-danger btn-sm m-1" data-toggle="modal" data-target="#deleteModal">Apagar</button>
             </fieldset>
            
         </form>
     </div>
 </div>
-		<div class="col-sm-6">
-			<div class="content-section">
-     
-
-				__copia e cola __
-    	</div>
-		</div>	
-	</div>
 </div>
-
-<div class="container-fluid">
-	<div class="row">
-		<div class="col-sm-6">
-			<div class="content-section">
-		 
-                <div class="article-metadata">
-                <table class="table ">
-                    <th scope="col"> Descrição </th>
-                    <th scope="col"> Valor </th>
-                    <th scope="col"> Data </th>
-                    <th scope="col"> Ações </th>
-                </table>
-
-				<div class="article-metadata">
-                {% for desc in query_pagar %}
-                <div class="table-responsive">
-                <table class="table table-hover table-sm">
-                    <td>{{ desc.descpagar }}</td>
-                    <td>R$ {{ desc.valorpagar }}</td>
-                    <td>{{ desc.datapagar }}</td>
-                    <td>
-<a class="btn btn-secondary btn-sm mt-1 mb-1" href="{{ url_for('atualizar_contas_pagar',conta_id=desc.id) }}">Ações</a>
-
-
-                    </td>
-                </table>
-            </div>
-                {% endfor %}   
-
-              
-              </div>
-                    
-
-            </div>
-           
-			</div>
-		</div>
-		<div class="col-sm-6">
-			
-			
-		</div>
-	</div>
-
 </div>
 
 
 
-
-
-
-
-
-
-
-
+ <!-- Modal -->
+  <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="deleteModalLabel">Deseja mesmo prosseguir?</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <form action="{{ url_for('deletar_pagar', conta_id=query_pagar.id) }}" method="POST">
+              <input class="btn btn-danger" type="submit" value="Delete">
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
 {% endblock content %}

@@ -7,30 +7,7 @@ from seminario.forms import FormDeLogin, FormDeRegistro, FormDeAtualizarConta, F
 from seminario.models import Usuario, Pagar
 from flask_login import login_user, current_user, logout_user, login_required
 from flask_mail import Message
-
-from io import BytesIO
-from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
-from mpl_toolkits.mplot3d import Axes3D
-import numpy as np
-import matplotlib.pyplot as plt
-import pandas as pd
-plt.style.use('ggplot')
-
-@app.route('/bar_graph/')
-def bar_graph():
-    fig, ax = plt.subplots()
-    df=pd.read_csv("https://raw.githubusercontent.com/vincentarelbundock/Rdatasets/master/csv/quantreg/gasprice.csv")
-    time=df['time']
-    gasprice=df['value']
-    plt.plot(time,gasprice, color='orange')
-    #plt.xlabel("Time (Year)")
-    #plt.ylabel("Gas Price")
-    #plt.title("Time Series of US Gasoline Prices ")
-    canvas = FigureCanvas(fig)
-    img = BytesIO()
-    fig.savefig(img)
-    img.seek(0)
-    return send_file(img, mimetype='image/png')
+from sqlalchemy import func
 
 @app.route("/")
 
@@ -40,7 +17,18 @@ def home():
 
 @app.route("/sistema")
 def sistema():
-	return render_template('sistema.html')
+	
+	#Query dos lançamentos
+	query_pagar = db.session.query(func.sum(Pagar.valorpagar)).first()
+
+	
+
+	diferenca =float(query_pagar[0]) + 1000
+	
+
+	return render_template('sistema.html', query_pagar=query_pagar[0], diferenca=diferenca)
+
+
 
 @app.route("/registro", methods=['GET', 'POST'])
 def registro():
@@ -108,26 +96,68 @@ def minha_conta():
 	imagem_perfil = url_for('static', filename='profile_pics/' + current_user.imagem_perfil)
 	return render_template('minha_conta.html', title='Minha Conta', imagem_perfil=imagem_perfil, formulario=formulario)
 
-@app.route("/contas/pagarnovo", methods=['GET', 'POST'])
+@app.route("/contas/novo", methods=['GET', 'POST'])
 @login_required
 def contas():
-	
-	
-	descricao = Pagar.query.order_by(Pagar.descpagar.desc()).first()
-	#descricao_valor = Pagar.query.order_by(Pagar.valorpagar.desc()).first()
-	#descricao_data = Pagar.query.order_by(Pagar.datapagar.desc()).first()
-
-
 	formulario = FormContasPagar()
+
+	query_pagar = Pagar.query.filter_by(id_usuario=current_user.id)
+
 	if formulario.validate_on_submit():
 		pagar = Pagar(descpagar=formulario.descpagar.data, 
 			valorpagar=formulario.valorpagar.data, datapagar=formulario.datapagar.data, usuario=current_user) # id_usuario=current_user.id
 		db.session.add(pagar)
 		db.session.commit()
-		flash(f'Valor gravado com sucesso!', 'success')
-		
-
-		
+		flash(f'Valor gravado com sucesso!', 'success')	
 		return redirect(url_for('contas'))
 	
-	return render_template('contas.html', title='contas', formulario=formulario, descricao=descricao)
+	return render_template('contas.html', title='contas', formulario=formulario, query_pagar=query_pagar)
+'''
+#Rota para pegar o id da conta a ser editada
+@app.route("/contas/<conta_id>")
+def editar_seila(conta_id):
+	query_pagar = Pagar.query.get_or_404(conta_id)
+
+	return render_template('editar.html', query_pagar=query_pagar)
+'''
+#Rota que edita e popula a conta 
+@app.route("/contas/<conta_id>/editar", methods=['GET', 'POST'])
+@login_required
+def atualizar_contas_pagar(conta_id):
+	query_pagar = Pagar.query.get_or_404(conta_id)
+	if query_pagar.usuario != current_user:
+		abort(403)
+
+	formulario = FormContasPagar()
+	
+	if formulario.validate_on_submit():
+		print('aqui no if maldito')
+		query_pagar.descpagar = formulario.descpagar.data
+		query_pagar.valorpagar = formulario.valorpagar.data
+		query_pagar.datapagar = formulario.datapagar.data
+		db.session.commit()
+		flash('Editado com sucesso!')
+		return redirect(url_for('contas', conta_id=query_pagar.id))
+
+	elif request.method == 'GET':
+		print('aqui no populate')
+		formulario.descpagar.data = query_pagar.descpagar
+		formulario.valorpagar.data = query_pagar.valorpagar
+		formulario.datapagar.data = query_pagar.datapagar
+		
+	return render_template('editar.html', formulario=formulario, query_pagar=query_pagar)
+
+@app.route("/contas/<conta_id>/deletar", methods=['POST'])
+@login_required
+def deletar_pagar(conta_id):
+	query_pagar = Pagar.query.get_or_404(conta_id)
+	if query_pagar.usuario != current_user:
+		abort(403)
+	db.session.delete(query_pagar)
+	db.session.commit()
+	flash('Apagado com sucesso', 'success')
+	return redirect(url_for('contas'))
+    
+    
+
+    
