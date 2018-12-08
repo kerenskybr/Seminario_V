@@ -1,0 +1,201 @@
+{% extends "layout.html" %}
+
+{% block scripts %}
+  {{ super() }}
+  {{ datepicker.loader() }} {# to load jQuery-ui #}
+  {{ datepicker.picker(id=".dp") }}
+{% endblock scripts %}
+
+{% block content %}
+
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-sm-6">
+			<div class="content-section">
+        <form method="POST" action="">
+            {{ formulario.hidden_tag() }}
+
+
+            <fieldset class="form-group form-inline ">
+                <legend class="border-bottom mb-2">Contas a Pagar</legend>
+                <div class="form col-sm-5"><!-- form group do descricao pagar -->
+                  <svg-icon><src href="static/svg/si-glyph-adjustment-vertical.svg"/></svg>
+                    {{ formulario.descpagar.label(class="form-control-label") }}
+
+                    {% if formulario.descpagar.errors %} <!-- se o form for preenchido errado, exibe erro-->
+                        {{ formulario.descpagar(class="form-control form-control-sm is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in formulario.descpagar.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ formulario.descpagar(class="form-control form-control-sm") }}
+                    {% endif %}
+                </div>
+
+                <div class="input-append date form_datetime"> <!-- form group do valor pagar -->
+
+                    {{ formulario.valorpagar.label(class="form-control-label") }}
+                    {% if formulario.valorpagar.errors %}
+                        {{ formulario.valorpagar(class="form-control form-control-sm is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in formulario.valorpagar.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ formulario.valorpagar(class="form-control form-control-sm") }}
+                    {% endif %}
+                </div>
+
+                <div class="form col-sm-5"> <!-- form group do data pagar data-date-format="dd/mm/yyyy"-->
+                  
+                    {{ formulario.datapagar.label(class="form-control-label") }}
+                    {% if formulario.datapagar.errors %}
+                        {{ formulario.datapagar(class="form-control form-control-sm is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in formulario.datapagar.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                {{ formulario.datapagar(class="form-control form-control-sm", type="date")}}
+
+                    {% endif %}
+                </div>
+             		 <div>
+                {{ formulario.submit(class="btn btn-sucess btn-block") }}
+            	</div>
+            </fieldset>
+           
+        </form>
+    </div>
+</div>
+		<div class="col-sm-6">
+			<div class="content-section">
+     <!-- RECEBER -->
+    <form method="POST" action="">
+            {{ formulario_r.hidden_tag() }}
+            <fieldset class="form-group form-inline ">
+                <legend class="border-bottom mb-2">Contas a Receber</legend>
+                <div class="form col-sm-5"><!-- form group do descricao pagar -->
+                  
+                    {{ formulario_r.descreceber.label(class="form-control-label") }}
+
+                    {% if formulario_r.descreceber.errors %} <!-- se o form for preenchido errado, exibe erro-->
+                        {{ formulario_r.descreceber(class="form-control form-control-sm is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in formulario_r.descreceber.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ formulario_r.descreceber(class="form-control form-control-sm") }}
+                    {% endif %}
+                </div>
+
+                <div class="input-append date form_datetime"> <!-- form group do valor receber -->
+
+                    {{ formulario_r.valorreceber.label(class="form-control-label") }}
+                    {% if formulario_r.valorreceber.errors %}
+                        {{ formulario_r.valorreceber(class="form-control form-control-sm is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in formulario_r.valorreceber.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ formulario_r.valorreceber(class="form-control form-control-sm") }}
+                    {% endif %}
+                </div>
+
+                <div class="form col-sm-5"> <!-- form group do data receber data-date-format="dd/mm/yyyy"-->
+                  
+                    {{ formulario_r.datareceber.label(class="form-control-label") }}
+                    {% if formulario_r.datareceber.errors %}
+                        {{ formulario_r.datareceber(class="form-control form-control-sm is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in formulario_r.datareceber.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+     
+                {{ formulario_r.datareceber(class="form-control form-control-sm", type="date")}}
+                       
+                    {% endif %}
+                </div>
+                     <div>
+                {{ formulario_r.submit(class="btn btn-sucess btn-block") }}
+                </div>
+            </fieldset>
+           
+        </form>
+
+    	</div>
+		</div>	
+	</div>
+     <!-- ####################################### -->
+</div>
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-sm-6">
+			<div class="content-section">
+		 
+                <div class="article-metadata">
+                <table class="table ">
+                    <th scope="col"> Descrição </th>
+                    <th scope="col"> Valor </th>
+                    <th scope="col"> Data </th>
+                    <th scope="col"> Ações </th>
+                </table>
+                
+                <table class="table table-hover table-sm text-danger">
+                {% for desc in query_pagar %}
+                <tr>
+                    <th scope="row">
+                    <td>{{ desc.descpagar }}</td>
+                    <td> {{ "R$ {:,.2f}".format(desc.valorpagar) }}</td>
+                    <td>{{ desc.datapagar.strftime('%d/%m/%Y')  }}</td>
+                    <td> <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{{ url_for('atualizar_contas_pagar',conta_id=desc.id) }}">Ações</a></td>
+                    </th>
+           
+                {% endfor %}  
+                </tr> 
+                </table>
+
+            </div>
+           
+			</div>
+		</div>
+		<div class="col-sm-6">
+	       <div class="content-section">
+             <div class="article-metadata">
+                <table class="table ">
+                    <th scope="col"> Descrição </th>
+                    <th scope="col"> Valor </th>
+                    <th scope="col"> Data </th>
+                    <th scope="col"> Ações </th>
+                </table>
+
+                <table class="table table-hover table-sm text-success">
+                {% for desc in query_receber %}
+                <tr>
+                    <th scope="row">
+                    <td>{{ desc.descreceber }}</td>
+                    <td>{{ "R$ {:,.2f}".format(desc.valorreceber) }}</td>
+                    <td>{{ desc.datareceber.strftime('%d/%m/%Y')  }}</td>
+                    <td> <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{{ url_for('atualizar_contas_receber',receber_id=desc.id) }}">Ações</a></td>
+                    </th>
+                </tr>
+                 {% endfor %}
+                </table>
+
+                </div>
+            </div>		
+		</div>
+    </div>                
+</div>
+
+{% endblock content %}

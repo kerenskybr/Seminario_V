@@ -1,0 +1,200 @@
+{% extends "layout.html" %}
+{% block content %}
+
+
+
+<div class="container-fluid">
+  <div class="row">
+   <div class="col-md-4">
+    <div class="content-section">
+      <p>Resumo</p>   
+       <table class="table table-light">
+        <tr>
+          <th scope="row">
+            <td>Lançamentos</td>
+            <td>{{ "R$ {:,.2f}".format(query_receber) }}</td>
+          </th>
+        </tr>
+        <tr>
+          <th scope="row">
+            <td>Vencimentos</td>
+            <td>{{ "R$ {:,.2f}".format(query_pagar) }}</td>    
+          </th>
+        </tr>
+        <tr> 
+
+         <th scope="row">
+          <td><br><br><br></td>
+          
+        </th>
+      </tr>
+       <tr>
+      <th scope="row">   
+
+        <td>Saldo</td>
+        {% if diferenca >= 0 %}
+        <td class="table-success">{{ "R$ {:,.2f}".format(diferenca) }}</td>
+        {% else %}
+        <td class="table-danger">{{ "R$ {:,.2f}".format(diferenca) }}</td>
+        {% endif %}    
+      </th>
+    </tr>
+
+    </table>
+  </div><!-- content section-->
+</div><!-- col md 4 -->
+
+
+    <div class="col-sm-5">
+      <div class="content-section">
+    <!-- grafico -->
+    <p>Histórico</p>
+    <canvas id="chart" width="500" height="250"></canvas>
+ 
+    </div>
+    </div><!-- col md 5 -->
+  
+    <div class="col-sm-3">
+      <div class="content-section"> 
+     <img class="rounded-circle article-img" src="{{ url_for('static', filename='profile_pics/' + current_user.imagem_perfil) }}">
+     <p></p>
+    <tr class="table"> <p>Bem vindo <b>{{ current_user.nome }}</b></p></tr>
+     <small> Mensagens do dia: </small>
+        <p></p>
+        {% if dia_atual != check_dia.datapagar %}
+           <li> Nenhuma conta vencendo hoje! </li>
+           {% elif dia_atual > check_dia.datapagar  %}
+           <li> Você tem contas vencidas! </li>
+           {% elif dia_atual == check_dia.datapagar %}
+            <li> Você tem vencimentos para hoje! </li>
+        {% endif %}
+      </div>
+
+    </div><!-- col md 3 -->
+
+
+
+  </div> <!-- row -->
+</div> <!-- container -->
+
+
+
+
+<div class="container-fluid">
+	<div class="row">
+       
+       <div class="col-md-6 float-left">
+       	 <div class="content-section border-bottom mb-2">
+       	 	<h6><b>Lançamentos</b></h6>
+          <table class="table table-sm">
+          {% for lanc in query_receber_for %}
+           
+            <tr>
+             <th scope="row">
+                <td>  {{ lanc.descreceber }}</td>
+                <td>{{ "R$ {:,.2f}".format(lanc.valorreceber) }}</td>
+              </th>  
+             </tr>   
+           {% endfor %}
+         </table>
+       	 </div>
+	</div>
+	
+  <div class="col-md-6 float-right">
+    <div class="content-section border-bottom mb-2">
+      <h6><b>Vencimentos</b></h6>
+      <table class="table table-sm ">             
+            {% for desc in query_dia %}
+              {% if desc.datapagar == dia_atual %}
+            <tr class="table-warning">
+              <th scope="row">
+                <td>{{ desc.descpagar }}</td>
+                <td>{{ "R$ {:,.2f}".format(desc.valorpagar) }}</td>
+                <td>{{ desc.datapagar.strftime('%d/%m/%Y') }}</td>
+                <td> <b>Vencendo hoje</b> </td>
+                <td> <a class="btn btn-dark btn-sm mt-1 mb-1" href="#">Marcar como paga</a></td> 
+              </th>
+            </tr>
+              {% elif desc.datapagar < dia_atual %}
+            <tr class="table-danger">
+              <th scope="row">
+                <td>{{ desc.descpagar }}</td>
+                <td>{{ "R$ {:,.2f}".format(desc.valorpagar) }}</td>
+                <td>{{ desc.datapagar.strftime('%d/%m/%Y') }}</td>
+                <td><b> Vencida</b> </td>
+                <td> <a class="btn btn-dark btn-sm mt-1 mb-1" href="#">Marcar como paga</a></td> 
+              </th>
+            </tr>
+              {% endif %}
+                
+           {% endfor %}
+          {% if dia_atual != check_dia.datapagar %}
+            <p></p>
+           <p class="text-success"> Nenhuma conta vencendo hoje! </p>
+           {% elif dia_atual > check_dia.datapagar %}
+
+           <p class="text-danger"> Você tem contas vencidas! </p>
+
+          {% endif %}
+         </table>
+       </div>
+	   </div>
+  </div>
+</div>
+   
+</div>
+<script src='static/Chart.min.js'></script>
+<script>
+ 
+   // bar chart data
+   var barData = {
+   labels : [{% for item in labels %}
+                  "{{item}}",
+              {% endfor %}],
+   datasets : [
+      {
+      fillColor: "rgba(151,187,205,0.2)",
+      strokeColor: "rgba(151,187,205,1)",
+      pointColor: "rgba(151,187,205,1)",
+      pointStrokeColor: "#fff",
+      pointHighlightFill: "#fff",
+      pointHighlightStroke: "rgba(151,187,205,1)",
+      bezierCurve : false,
+      data : [{% for item in values %}
+                {{diferenca}},
+              {% endfor %}]
+      }]
+   }
+ 
+    Chart.defaults.global.animationSteps = 50;
+    Chart.defaults.global.tooltipYPadding = 16;
+    Chart.defaults.global.tooltipCornerRadius = 0;
+    Chart.defaults.global.tooltipTitleFontStyle = "normal";
+    Chart.defaults.global.tooltipFillColor = "rgba(0,0,0,0.8)";
+    Chart.defaults.global.animationEasing = "easeOutBounce";
+    Chart.defaults.global.responsive = false;
+    Chart.defaults.global.scaleLineColor = "black";
+    Chart.defaults.global.scaleFontSize = 16;
+ 
+   // get bar chart canvas
+   var mychart = document.getElementById("chart").getContext("2d");
+ 
+   steps = 10
+   max = 1000
+   // draw bar chart
+   var LineChartDemo = new Chart(mychart).Line(barData, {
+        scaleOverride: true,
+        scaleSteps: steps,
+        scaleStepWidth: Math.ceil(max / steps),
+        scaleStartValue: 0,
+        scaleShowVerticalLines: true,
+        scaleShowGridLines : true,
+        barShowStroke : true,
+        scaleShowLabels: true,
+        bezierCurve: false,
+ 
+   });
+ 
+ 
+</script>
+{% endblock content %} <!-- content nao é necessario, mas ajuda a se organizar-->

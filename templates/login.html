@@ -1,0 +1,60 @@
+{% extends "layout.html" %}
+{% block content %}
+
+<div class="login-centro">
+
+        <div class="content-section center">
+        <form method="POST" action="">
+            {{ formulario.hidden_tag() }}
+            <fieldset class="form-group">
+                <legend class="border-bottom mb-2">Log in</legend>
+
+                <div class="form-group"> <!-- form group do email -->
+                    <span class="glyphicon glyphicon-align-left" aria-hidden="true"></span>
+                    {{ formulario.email.label(class="form-control-label") }}
+
+                    {% if formulario.email.errors %}
+                        {{ formulario.email(class="form-control form-control-sm is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in formulario.email.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ formulario.email(class="form-control form-control-sm") }}
+                    {% endif %}
+                </div>
+                <div class="form-group "> <!-- form group do password -->
+                    {{ formulario.senha.label(class="form-control-label ") }}
+                    {% if formulario.senha.errors %}
+                        {{ formulario.senha(class="form-control form-control-sm is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in formulario.senha.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ formulario.senha(class="form-control form-control-sm") }}
+                    {% endif %}
+                </div>
+                <div class="form-check">
+                    {{ formulario.lembrarme(class="form_check_input") }}
+                        {{ formulario.lembrarme.label(class="form_check_label") }}
+                </div>
+            </fieldset>
+            <div class="form-group">
+                {{ formulario.submit(class="btn btn-outline-info") }}
+                 <small class="text-muted ml-2">
+                <a href="#">Esqueci minha senha?</a>
+            </small>
+            </div>
+           <div class="content-section center border-top pt-3">
+        <small class="text-muted">
+            Não tem uma conta? <a class="ml-2" href="{{ url_for('registro') }}">Crie agora</a>
+        </small>
+    </div>
+        </form>
+    </div>
+    
+</div>
+{% endblock content %}

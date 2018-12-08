@@ -1,0 +1,91 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-sm-6">
+
+	<div class="content-section">
+      <form method="POST" action="">
+            {{ formulario.hidden_tag() }}
+            <fieldset class="form-group form-inline ">
+                <legend class="border-bottom mb-2">Editando - Contas a Pagar</legend>
+                <div class="form col-sm-5"><!-- form group do descricao pagar -->
+                    {{ formulario.descpagar.label(class="form-control-label") }}
+
+                    {% if formulario.descpagar.errors %} <!-- se o form for preenchido errado, exibe erro-->
+                        {{ formulario.descpagar(class="form-control form-control-sm is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in formulario.descpagar.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ formulario.descpagar(class="form-control form-control-sm") }}
+                    {% endif %}
+                </div>
+
+                <div class="form col-sm-5"> <!-- form group do valor pagar -->
+                    {{ formulario.valorpagar.label(class="form-control-label") }}
+                    {% if formulario.valorpagar.errors %}
+                        {{ formulario.valorpagar(class="form-control form-control-sm is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in formulario.valorpagar.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ formulario.valorpagar(class="form-control form-control-sm") }}
+                    {% endif %}
+                </div>
+
+                <div class="form col-sm-5"> <!-- form group do data pagar -->
+                    {{ formulario.datapagar.label(class="form-control-label") }}
+                    {% if formulario.datapagar.errors %}
+                        {{ formulario.datapagar(class="form-control form-control-sm is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in formulario.datapagar.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                    
+                       {{ formulario.datapagar(class="form-control form-control-sm", type="date" ) }} <!--INSERT -->
+                       
+                    {% endif %}
+                </div>
+            
+                {{ formulario.submit_editar(class="btn-group btn-success btn-sm m-1") }}
+               
+             		 <button type="button" class="btn btn-danger btn-sm m-1" data-toggle="modal" data-target="#deleteModal">Apagar</button>
+                      <a class="btn btn-info btn-sm m-1" href="{{ url_for('contas') }}">Voltar</a>
+                      
+          
+          </fieldset>
+        </form>
+        </div>
+      </div> <!-- div col -->
+
+
+    </div>
+  </div>
+
+ <!-- Modal -->
+  <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="deleteModalLabel">Deseja mesmo prosseguir? Essa ação não poderá ser desfeita! </h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <form action="{{ url_for('deletar_pagar', conta_id=query_p.id) }}" method="POST">
+              <input class="btn btn-danger" type="submit" value="Delete">
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock content %}

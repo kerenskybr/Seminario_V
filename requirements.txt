@@ -1,0 +1,28 @@
+
+        {% for dia in query_dia %}
+          
+          {% if dia.datapagar == dia_atual %}
+            <table class="table table-hover table-sm">
+              <td class="text-danger"> Contas vencendo hoje :</td>
+              <td>{{ dia.descpagar }}</td>
+              <td>R$ {{ dia.valorpagar }}</td>
+              <td>{{ dia.datapagar.strftime('%d/%m/%Y')  }}</td>
+            </table>
+        
+          {% else %}
+              <td class="text-success"> Nenhuma conta próxima de vencer</td>
+          {% endif %}
+        {% endfor %}   
+
+       
+        {% if datapagar == dia_atual %}
+            <table class="table table-hover table-sm">
+              <td class="text-danger"> Contas vencendo hoje :</td>
+              <td>{{ descpagar }}</td>
+              <td>R$ {{ valorpagar }}</td>
+              <td>{{ datapagar.strftime('%d/%m/%Y')  }}</td>
+            </table>
+        
+          {% else %}
+              <td class="text-success"> Nenhuma conta próxima de vencer</td>
+          {% endif %}

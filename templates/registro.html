@@ -1,0 +1,80 @@
+{% extends "layout.html" %}
+{% block content %}
+
+<div class="login-centro">
+
+<div class="content-section">
+        <form method="POST" action="">
+            {{ formulario.hidden_tag() }}
+            <fieldset class="form-group">
+                <legend class="border-bottom mb-2">Registro</legend>
+                <div class="form-group"><!-- form group do usuario -->
+                    {{ formulario.nome.label(class="form-control-label") }}
+
+                    {% if formulario.nome.errors %} <!-- se o form for preenchido errado, exibe erro-->
+                        {{ formulario.nome(class="form-control form-control-sm is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in formulario.nome.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ formulario.nome(class="form-control form-control-sm") }}
+                    {% endif %}
+                </div>
+                <div class="form-group"> <!-- form group do email -->
+                    {{ formulario.email.label(class="form-control-label") }}
+                    {% if formulario.email.errors %}
+                        {{ formulario.email(class="form-control form-control-sm is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in formulario.email.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ formulario.email(class="form-control form-control-sm") }}
+                    {% endif %}
+                </div>
+                <div class="form-group"> <!-- form group do password -->
+                    {{ formulario.senha.label(class="form-control-label") }}
+                    {% if formulario.senha.errors %}
+                        {{ formulario.senha(class="form-control form-control-sm is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.senha.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ formulario.senha(class="form-control form-control-sm") }}
+                    {% endif %}
+                </div>
+                <div class="form-group"> <!-- form group do confirm password -->
+                    {{ formulario.confirmar_senha.label(class="form-control-label") }}
+                    {% if formulario.confirmar_senha.errors %}
+                        {{ formulario.confirmar_senha(class="form-control form-control-sm is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in formulario.confirmar_senha.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ formulario.confirmar_senha(class="form-control form-control-sm") }}
+                    {% endif %}
+                </div>
+            </fieldset>
+            <div class="form-group">
+                {{ formulario.submit(class="btn btn-outline-info") }}
+
+
+        <small class="text-muted">
+            <p> Já tem conta? <a class="ml-2" href="{{ url_for('login') }}">Login</a>
+        </small>
+  
+
+            </div>
+        </form>
+    </div>
+   
+
+</div>
+{% endblock content %}

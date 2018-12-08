@@ -1,0 +1,63 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="login-centro">
+
+	<div class="content-section">
+	  <div class="media">
+	    <img class="rounded-circle account-img" src="{{ imagem_perfil }}">
+	    <div class="media-body">
+	      <h2 class="account-heading"> {{ current_user.nome }}</h2>
+	      <p class="text-secondary"> {{ current_user.email }} </p>
+	    </div>
+	  </div>
+	 
+        <form method="POST" action="" enctype="multipart/form-data">
+            {{ formulario.hidden_tag() }}
+            <fieldset class="form-group">
+                <legend class="border-bottom mb-2">Informações da sua conta:</legend>
+                <div class="form-group"><!-- form group do usuario -->
+                    {{ formulario.nome.label(class="form-control-label") }}
+
+                    {% if formulario.nome.errors %} <!-- se o form for preenchido errado, exibe erro-->
+                        {{ formulario.nome(class="form-control form-control-sm is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in formulario.nome.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ formulario.nome(class="form-control form-control-sm") }}
+                    {% endif %}
+                </div>
+                <div class="form-group"> <!-- form group do email -->
+                    {{ formulario.email.label(class="form-control-label") }}
+                    {% if formulario.email.errors %}
+                        {{ formulario.email(class="form-control form-control-sm is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in formulario.email.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ formulario.email(class="form-control form-control-sm") }}
+                    {% endif %}
+                </div>
+                    <div class="form-group"> <!-- form group da iamgem de perfil -->
+                    {{ formulario.imagem.label() }}
+                    {{ formulario.imagem(class="form-control-file btn-info") }}
+                    {% if formulario.imagem.erros %}
+                        {% for error in formulario.imagem.errors %}
+                            <span class="text-danger"> {{ error }} </span> </br>
+                        {% endfor %}
+
+                    {% endif %}
+
+            </fieldset>
+            <div class="form-group">
+                {{ formulario.submit(class="btn btn-outline-info") }}
+            </div>
+        </form>
+  
+	</div>
+</div>
+{% endblock content %} <!-- content nao é necessario, mas ajuda a se organizar-->

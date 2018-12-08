@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="pt_br" dir="ltr">
+<head>
+  {% block head %}
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='main.css') }}">
+
+  <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+
+  <link href="http://cdn.pydata.org/bokeh/release/bokeh-0.12.5.min.css" rel="stylesheet">
+  <link href="http://cdn.pydata.org/bokeh/release/bokeh-widgets-0.12.0.min.css" rel="stylesheet">
+
+
+  <meta charset="utf-8">
+    {% if title %}
+  <title>Siscope - Sistema de Controle Financeiro Pessoal {{ title }}</title>
+    {% else %}
+  <title>Siscope</title>
+    {% endif %}
+  {% endblock %}
+
+ 
+</head>
+
+
+<body>
+
+<!-- Inicio do Header -->
+  <header class="site-header">
+    <nav class="navbar navbar-expand-md navbar-dark bg-personalizado fixed-top">
+      <div class="container"> <!-- div do container -->
+        <a class="navbar-brand mr-4" href="/"> <img src="{{ url_for('static', filename='logo.png') }}"> </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggle" aria-controls="navbarToggle" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+          <!-- Navbar a direira, acesso, registro  -->
+         
+ {% if current_user.is_authenticated %}
+
+<ul class="nav nav-tabs">
+  <li class="nav-item">
+    
+    <a class="nav-link disabled" href="{{ url_for('sistema') }}">Início </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link disabled" href="{{ url_for('contas') }}">Contas</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link disabled" href="#">Relatórios</a>
+  </li>
+   <li class="nav-item">
+    <a class="nav-link disabled" href="{{ url_for('calendario')}}">Calendário</a>
+  </li>
+   <li class="nav-item">
+    <a class="nav-link disabled" href="{{ url_for('minha_conta') }}">Minha Conta</a>
+  </li>
+</ul>
+{% else %}
+  <div>Sistema de Controle Financeiro Pessoal</div>
+{% endif %}
+
+ <div class="navbar-nav">
+            {% if current_user.is_authenticated %}
+              
+              <a class="nav-item nav-link" href="{{ url_for('minha_conta') }}">Perfil</a>
+        
+              <a class="nav-item nav-link" href="{{ url_for('sair') }}"> <b> Sair </b> </a>
+            {% else %}
+              <a class="nav-item nav-link" href="{{ url_for('login') }}">Acessar</a>
+              <a class="nav-item nav-link" href="{{ url_for('registro') }}">Criar Conta</a>
+            {% endif %}
+          </div>
+          
+        </div> <!-- fim da div container -->
+      </nav>
+  </header>
+<!-- Final do Header -->
+
+
+<!-- Botoes de sistema - so disponiveis quando o usuario se loga -->
+
+
+<main role="main" class="container-fluid">
+    <div class="row">
+      <div class="col-md-12">
+        {% with messages = get_flashed_messages(with_categories = true) %}
+        {% if messages %}
+        {% for category, message in messages %}
+        <div class="alert alert-{{ category }}">
+          {{ message }}
+        </div>
+        {% endfor %}
+        {% endif %}
+        {% endwith %}
+        {% block content %}{% endblock %}
+      </div>
+    </div>
+  </main>
+
+<!-- Footer grudado ao final da pagina -->
+<footer class="page-footer font-small fixed-bottom bg-personalizado">
+  <!-- Copyright -->
+  <div class="footer-copyright text-center py-3"> © 2018 Copyright -<b > Siscope - Sistema de Controle Financeiro Pessoal</b>
+  </div>
+</footer>
+<!-- Footer -->
+
+
+  <!-- Optional JavaScript -->
+  <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+  
+  <!-- /Start your project here-->
+  <script src='static/Chart.min.js'></script>
+  <!-- SCRIPTS -->
+  <!-- JQuery -->
+  <script type="text/javascript" src="js/jquery-3.3.1.min.js"></script>
+  <!-- Bootstrap tooltips -->
+  <script type="text/javascript" src="js/popper.min.js"></script>
+  <!-- Bootstrap core JavaScript -->
+  <script type="text/javascript" src="js/bootstrap.min.js"></script>
+  <!-- MDB core JavaScript -->
+  <script type="text/javascript" src="js/mdb.min.js"></script>
+
+</body>
+</html>
+
